@@ -68,4 +68,9 @@ def upload_image():
     
     return "Image uploaded successfully", 200
 
-@app.ro
+@app.route('/current-image', methods=['GET'])
+def current_image():
+    return send_file(image_path, mimetype='image/png')
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
