@@ -3,12 +3,15 @@ import os
 import subprocess
 
 app = Flask(__name__)
-image_path = "/home/discoposse/Desktop/gtm-delta.png"
-image_directory = "/home/discoposse/Desktop/images"
-image_files = ["image1.png", "image2.png", "image3.png"]  # List your image filenames here
+image_path = "/home/discoposse/Public/flag/image/gtm-delta.png"
+image_directory = "/home/discoposse/Public/flag/images"
+
+def get_image_files():
+    return [f for f in os.listdir(image_directory) if os.path.isfile(os.path.join(image_directory, f))]
 
 @app.route('/')
 def index():
+    images = get_image_files()
     html = '''
     <!doctype html>
     <html lang="en">
@@ -35,13 +38,13 @@ def index():
       </body>
     </html>
     '''
-    return render_template_string(html, images=image_files)
+    return render_template_string(html, images=images)
 
 @app.route('/change-image', methods=['POST'])
 def change_image():
     global image_path
     selected_image = request.form.get('image')
-    if selected_image not in image_files:
+    if not selected_image or not os.path.isfile(os.path.join(image_directory, selected_image)):
         return "Invalid image selected", 400
 
     new_image_path = os.path.join(image_directory, selected_image)
@@ -63,16 +66,6 @@ def upload_image():
     file_path = os.path.join(image_directory, file.filename)
     file.save(file_path)
     
-    # Add to image list if not already there
-    if file.filename not in image_files:
-        image_files.append(file.filename)
-
     return "Image uploaded successfully", 200
 
-@app.route('/current-image', methods=['GET'])
-def current_image():
-    return send_file(image_path, mimetype='image/png')
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
-
+@app.ro
