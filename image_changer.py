@@ -5,7 +5,7 @@ import subprocess
 app = Flask(__name__)
 image_path = "/home/discoposse/Public/flag/images/gtm-delta.png"
 image_directory = "/home/discoposse/Public/flag/images"
-image_files = ["gtm-delta.png", "discoposse-podcast.png", "snia-podcast.png"]  # List your image filenames here
+image_files = ["gtm-delta.png", "discoposse-podcast.png", "snia-eod.png"]  # List your image filenames here
 
 @app.route('/')
 def index():
