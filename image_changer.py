@@ -45,7 +45,20 @@ def change_image():
     global image_path
     selected_image = request.form.get('image')
     if not selected_image or not os.path.isfile(os.path.join(image_directory, selected_image)):
-        return "Invalid image selected", 400
+        html = '''
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Error</title>
+          </head>
+          <body>
+            <h1>Invalid image selected</h1>
+            <a href="/">Back to Home</a>
+          </body>
+        </html>
+        '''
+        return html, 400
 
     new_image_path = os.path.join(image_directory, selected_image)
     os.system(f'cp {new_image_path} {image_path}')
@@ -54,19 +67,71 @@ def change_image():
     subprocess.run(["pkill", "chromium"])
     subprocess.Popen(["chromium-browser", "-kiosk", image_path])
 
-    return "Image updated successfully", 200
+    html = '''
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Success</title>
+      </head>
+      <body>
+        <h1>Image updated successfully</h1>
+        <a href="/">Back to Home</a>
+      </body>
+    </html>
+    '''
+    return html, 200
 
 @app.route('/upload-image', methods=['POST'])
 def upload_image():
     if 'file' not in request.files:
-        return "No file part", 400
+        html = '''
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Error</title>
+          </head>
+          <body>
+            <h1>No file part</h1>
+            <a href="/">Back to Home</a>
+          </body>
+        </html>
+        '''
+        return html, 400
     file = request.files['file']
     if file.filename == '':
-        return "No selected file", 400
+        html = '''
+        <!doctype html>
+        <html lang="en">
+          <head>
+            <meta charset="utf-8">
+            <title>Error</title>
+          </head>
+          <body>
+            <h1>No selected file</h1>
+            <a href="/">Back to Home</a>
+          </body>
+        </html>
+        '''
+        return html, 400
     file_path = os.path.join(image_directory, file.filename)
     file.save(file_path)
-    
-    return "Image uploaded successfully", 200
+
+    html = '''
+    <!doctype html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8">
+        <title>Success</title>
+      </head>
+      <body>
+        <h1>Image uploaded successfully</h1>
+        <a href="/">Back to Home</a>
+      </body>
+    </html>
+    '''
+    return html, 200
 
 @app.route('/current-image', methods=['GET'])
 def current_image():
