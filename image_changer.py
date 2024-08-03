@@ -3,9 +3,9 @@ import os
 import subprocess
 
 app = Flask(__name__)
-image_path = "/home/discoposse/Public/flag/images/gtm-delta.png"
-image_directory = "/home/discoposse/Public/flag/images"
-image_files = ["gtm-delta.png", "discoposse-podcast.png", "snia-eod.png"]  # List your image filenames here
+image_path = "/home/discoposse/Desktop/gtm-delta.png"
+image_directory = "/home/discoposse/Desktop/images"
+image_files = ["image1.png", "image2.png", "image3.png"]  # List your image filenames here
 
 @app.route('/')
 def index():
@@ -27,6 +27,11 @@ def index():
           </select>
           <input type="submit" value="Submit">
         </form>
+        <h1>Upload New Image</h1>
+        <form action="/upload-image" method="post" enctype="multipart/form-data">
+          <input type="file" name="file" id="file">
+          <input type="submit" value="Upload">
+        </form>
       </body>
     </html>
     '''
@@ -47,6 +52,22 @@ def change_image():
     subprocess.Popen(["chromium-browser", "-kiosk", image_path])
 
     return "Image updated successfully", 200
+
+@app.route('/upload-image', methods=['POST'])
+def upload_image():
+    if 'file' not in request.files:
+        return "No file part", 400
+    file = request.files['file']
+    if file.filename == '':
+        return "No selected file", 400
+    file_path = os.path.join(image_directory, file.filename)
+    file.save(file_path)
+    
+    # Add to image list if not already there
+    if file.filename not in image_files:
+        image_files.append(file.filename)
+
+    return "Image uploaded successfully", 200
 
 @app.route('/current-image', methods=['GET'])
 def current_image():

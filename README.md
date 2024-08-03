@@ -10,8 +10,8 @@ import os
 import subprocess
 
 app = Flask(__name__)
-image_path = "/home/discoposse/Desktop/gtm-delta.png"
-image_directory = "/home/discoposse/Desktop/images"
+image_path = "/home/discoposse/Public/flag/gtm-delta.png"
+image_directory = "/home/discoposse/Public/flag/images"
 image_files = ["image1.png", "image2.png", "image3.png"]  # List your image filenames here
 
 @app.route('/')
@@ -110,3 +110,14 @@ Replace `/path/to/image_changer.py` with the full path to your script.
 
 ### Summary:
 This setup allows you to change the displayed image on the Raspberry Pi through a web interface, automatically refreshing the Chromium browser to reflect the changes without needing a reboot.
+
+```bash
+curl -F 'file=@/home/discoposse/Public/flag/images/snia-eod.png' http://discopi.local:5000/upload-image
+```
+
+My config
+
+image_path = "/home/discoposse/Public/flag/images/gtm-delta.png"
+image_directory = "/home/discoposse/Public/flag/images"
+image_files = ["gtm-delta.png", "discoposse-podcast.png", "snia-eod.png"]  
+
